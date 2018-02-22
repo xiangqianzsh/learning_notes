@@ -8,6 +8,8 @@ $ git add c++.md
 $ git commit -m "new"
 $ git remote add origin git@github.com:xiangqianzsh/learning_notes.git
 $ git push -f  origin master
+# set tracking information for this branch
+$ git branch --set-upstream-to=origin/master master
 ```
 参考链接:
 - git仓库删除所有提交历史记录，成为一个干净的新仓库
