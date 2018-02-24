@@ -448,3 +448,96 @@ a 2
 Bus error: 10
 ```
 
+### map边迭代边erase出现问题
+目的是把一个hash表种不同的key的value均匀地取出, 工程上可以用在不同召回源的均匀截断. 只是迭代器累加的地方不一样, 结果却不相同.
+- 方法1, 正确
+```c++
+#include <iostream>
+#include <vector>
+#include <map>
+using namespace std;
+
+int main()
+{
+    vector<int> a{1, 2};
+    vector<int> b{11};
+    vector<int> c{21, 22, 23, 24};
+    
+    map<int, vector<int>> hash;
+    hash[1] = a;
+    hash[2] = b;
+    hash[3] = c;
+  
+    for (int idx = 0; idx < 100; idx++) {
+        for (auto it = hash.begin(); it != hash.end();) {
+            if (idx >= it->second.size()) {
+                hash.erase(it++);
+            } else {
+                cout << it->second[idx] << ", ";
+                it++;
+            }
+        }
+    }
+   return 0;
+}
+
+// result: 1, 11, 21, 2, 22, 23, 24, 
+```
+- 方法2, 不对, 多输出个2
+```c++
+#include <iostream>
+#include <vector>
+#include <map>
+using namespace std;
+
+int main()
+{
+	vector<int> a{1, 2};
+	vector<int> b{11};  // or b{}
+	vector<int> c{21, 22, 23, 24};
+	
+	map<int, vector<int>> hash;
+	hash[1] = a;
+	hash[2] = b;
+	hash[3] = c;
+	
+	for (int idx = 0; idx < 100; idx++) {
+		for (auto it = hash.begin(); it != hash.end(); it++) {
+			if (idx >= it->second.size()) {
+				hash.erase(it);
+			} else {
+				cout << it->second[idx] << ", ";
+			}
+		}
+	}
+   return 0;
+}
+
+// result: 1, 11, 21, 2, 2, 22, 23, 24, 
+```
+
+参考:  C++ STL中map.erase(it++)用法原理解析
+http://blog.csdn.net/liuzhi67/article/details/50950843
+
+
+```c++
+#include <iostream>
+#include <vector>
+#include <map>
+using namespace std;
+
+int main()
+{
+	map<int, int> hash;
+	hash[1] = 1;
+	hash[2] = 2;
+	hash[3] = 3;
+	
+	auto it = hash.begin();
+	cout << it->second << endl; // 1
+	hash.erase(it);
+	cout << it->second << endl; // 1, 即使删除了, 仍然是有it仍然是有效的
+	cout << (++it)->second << endl; // 2
+   return 0;
+}
+```
