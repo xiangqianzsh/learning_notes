@@ -483,7 +483,7 @@ int main()
 
 // result: 1, 11, 21, 2, 22, 23, 24, 
 ```
-- 方法2, 不对, 多输出个2
+- 方法2, 不对, 多输出个2, 这个在mac会直接报Segmentation fault的错误.
 ```c++
 #include <iostream>
 #include <vector>
@@ -541,3 +541,26 @@ int main()
    return 0;
 }
 ```
+
+## 知识点说明
+### map []操作, 如果没有, 会初始化.
+map中用[]进行读取时, 如果不存在相应的key, 则会先初始化一个, 对于value为std::vector类型时, 初始的vector为空.
+
+```c++
+#include <iostream>
+#include <map>
+#include <vector>
+using namespace std;
+class A {
+	int a = 3;
+};
+
+int main()
+{
+	A a1;
+	std::map<int, std::vector<A> > hash;
+   cout << hash[1].size();  // 不会出错, 没有key为1, 当读取的时候会新建立, 值中的vector为空.
+   return 0;
+}
+```
+
