@@ -44,6 +44,8 @@ scp -r user@hostname:/home/files  .
 ###rev 以最后一个字母进行排序:
 rev abc.txt | sort | rev > sorted.txt
 
+### cat -n 000005_0 |  awk -F "\001" '{print $1, $29}' |  grep "20185376423"
+
 ### find
 ```
 # 从当前目录开始查找所有扩展名为.conf.rb的文本文件，并找出包含”SortedKeyGroup”的文件
@@ -390,3 +392,23 @@ else
   echo '$var1 not eq $var2'
 fi
 ```
+
+# 有用代码片段
+
+```
+cat -n 000005_0 |  awk -F "\001" '{print $1, $29}' |  grep "20185376423"
+
+for((i=0;i<10;i++))
+do 
+    part_name=$(printf "%06d_0" $i)
+    
+    cmd="cat -n ${part_name} |  awk -F \"\001\" '{print \$1, \$29}' |  grep '1814482761' "
+    echo $cmd
+    eval $cmd
+done 
+```
+
+
+
+
+
