@@ -56,3 +56,17 @@ http://docs.continuum.io/anaconda/pkg-docs.html
     http://docs.continuum.io/conda/build.html 
 
 
+
+## 在ipython中用python3.4版本
+1. 安装python3.4的开发环境
+sudo apt-get install python3.4-dev
+2. 进入虚拟环境,安装ipython
+source ENV3.4/bin/activate
+pip install ipython[all]
+3. 在虚拟环境下用 python3.4 -m Ipython,就可以了.(有可能前面的步骤不是必需的.)
+
+
+**参考链接:**
+1. IPython Notebook in a virtualenv, using Python 3.3
+http://stackoverflow.com/questions/20290357/ipython-notebook-in-a-virtualenv-using-python-3-3
+
