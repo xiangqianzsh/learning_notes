@@ -33,6 +33,9 @@ echo "done!"
 
 ###并行化命令  cat cmd.txt  | parallel -j 3
 注意cmd.txt里面不要带`&`号
+
+parallel.sh 是需要下载的, 网上有.
+
 ### scp
 ```
 # cp单个文件:
@@ -158,16 +161,14 @@ vim中有时候编码有些有错是不能转换, 这里要强制下
 ```
 ###tail, head
 ```
-tail -n 100 ~/hadoop-mnt-stoff/ps/ubs/zhangshaohua02/display/20150725/part-00000 | python get_qid.py
+tail -n 100 data.txt | python run.py
+ls | head -n 20
+ls | head -n 20 | tail -n +10
 ```
 
 ###怎么查看linux文件夹下有多少个文件
 ls | wc -w是查看有多少个文件及文件夹
 ls -l | wc -l
-
-###显示文件中的部分文件
-ls | head -n 20
-ls | head -n 20 | tail -n +10
 
 ###linux find
 find   -name april*                     在当前目录下查找以april开始的文件
@@ -298,7 +299,6 @@ echo "finished output query_data"
 ```bash
 start_date=20160430
 end_date=20160508
-
 
 stat_date=$start_date
 while [[ $stat_date -le $end_date ]]; do
