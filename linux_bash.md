@@ -8,8 +8,9 @@ ll /proc/进程号
 
 ### 登录机器免密配置自动执行脚本：
 参考: https://chu888chu888.gitbooks.io/shellstudy/content/shellexample.html
-```
+
 登录机器免密配置：
+```
 1、在原始自己机器当前用户的家目录下执行“ssh-keygen -t rsa ”，产生一对公钥（文件名：id_rsa.pub)私钥（文件名：id_rsa）
    注意每次执行ssh –keygen –t rsa都会产生一对公钥私钥对，如果已有的话可以不需要再执行，否则会覆盖以前的配置
 
@@ -17,21 +18,77 @@ ll /proc/进程号
 
 3、直接ssh  目的机器user@目的机器主机serve 就会发现不需要输入密码啦
 
-本质：就是将自己的公钥写到对方的授权文件：authorized_keys 
+本质：就是将自己的公钥写到对方的授权文件：authorized_keys
+```
 
+执行代码示例1:
+```
 user ~/tools $  cat autossh.sh
+
 #!/bin/bash
+
 ssh user@hostname << SSHEND
+
     cd /home/test/
+
     >> test_temp.txt
+
     echo "helo"
+
     exit
+
 SSHEND
+
 echo "done!"
 ```
 
 
-###并行化命令  cat cmd.txt  | parallel -j 3
+执行代码示例
+```
+# ~/autossh.sh
+ssh zhangsan@172.80.70.101  << END
+    sh script_in_remote_machine.sh > log.txt 2>&1
+    # 这里需要加上转义, 因为ssh远程执行里$, 被转义了.
+    if [ \$? -eq 0 ];then
+        echo "index success, start scp index to new index test host"
+    else
+        echo "index_failed"
+        exit 1
+    fi
+END
+
+# 这个 $? 是判断上面的 ssh 命令是否成功, 不需要加转义
+if [ $? -ne 0 ]; then
+	echo "ssh failed"
+	exit 1
+fi
+```
+> 由于ssh远程执行时, $号被转义了, 所以要判断在远程机器里命令是否执行成功时, 需要在 $? 里加个转义符, 但是第二个 $? 就不需要, 因为是在本地机器.
+
+执行代码示例2:
+```
+# ~/autossh.sh
+ssh zhangsan@172.80.70.101  << END
+    file=/home/machine_infos.txt
+    > \${file}
+    
+    # ip
+    key=ip;
+    value=`hostname -i`
+    echo "{\"\${key}\": \"\${value}\"}" >> \$file;
+    
+    # kernel
+    key=kernel
+	value=`cat /proc/cpuinfo | grep processor | wc -l`;
+	echo "{\"\${key}\": \"\${value}\"}" >> \${file};
+END
+
+scp zhangsan@172.80.70.101:/home/machine_infos.txt ./
+
+```
+
+
+### 并行化命令  cat cmd.txt  | parallel -j 3
 注意cmd.txt里面不要带`&`号
 
 parallel.sh 是需要下载的, 网上有.
@@ -56,7 +113,7 @@ find . -name "*.conf.rb" | xargs grep "SortedKeyGroup"
 find . -name "*.sh" | xargs grep 'Linux-amd64-64'
 ```
 ### mail发邮件
-```bash
+​```bash
 cmd='wget ftp://hostname:/home/files/data.tar.gz'
 echo "Please execute this command to get data: ${cmd}" | mail -s data_${stat_date} -c aaa@163.com bbb@163.com ccc@163.com
 
@@ -67,7 +124,7 @@ linux mail命令用法
 http://www.cnblogs.com/xiaoshi1991/archive/2012/09/20/2695061.html
 
 ### split把文件分解成小文件
-```bash
+​```bash
 split ${file_name} -d ${file_name}_ -n 40 -a 5
 # part_00001, part_00002, ..., part_00040
 ```
