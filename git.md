@@ -32,6 +32,12 @@ alias git='http_proxy= git'
 #这样在运行git这个命令时http_proxy为空, 也不影响其它要用到http代理的操作
 ```
 
+## git commit -m "" 被提成了 git commit --amend, 如何还原
+```
+git reflog　# 找到自己想要退回的版本号, 如 1e89d70
+git reset 1e89d70 --soft
+git status -s
+```
 
 ## Git中tag的用法
 打标签

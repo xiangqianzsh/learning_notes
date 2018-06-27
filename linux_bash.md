@@ -107,6 +107,21 @@ rev abc.txt | sort | rev > sorted.txt
 
 ### cat -n 000005_0 |  awk -F "\001" '{print $1, $29}' |  grep "20185376423"
 
+### core
+查看core设置的目录
+```bash
+[admin]$ cat /proc/sys/kernel/core_pattern 
+/export/Data/coredump/core_%e
+[adminsrc]$ ls /export/Data/coredump/core*
+/export/Data/coredump/core_index_searcher.18035  /export/Data/coredump/core_main_worker.18903
+
+
+core_size=$[1024*1024*128]
+memory_size=$[1024*1024*128]
+ulimit -c $core_size
+ulimit -m $memory_size
+```
+
 ### find
 ```
 # 从当前目录开始查找所有扩展名为.conf.rb的文本文件，并找出包含”SortedKeyGroup”的文件
@@ -162,6 +177,9 @@ tail -n  100 /etc/man.config,  代表只取最后100行
 ```
 cat ${data_file} | grep 'TaggerKey' | grep 'CLICK' | head -n 1 | cut -f 1-8 > cut_file
 ```
+### curl
+请求二进制文件:
+curl --data-binary @ps_proto_20180315144159798.proto  '10.187.178.239:8080/?format=json&debug=true' > log.txt
 
 ###tar解压：
 ```bash
@@ -246,14 +264,19 @@ ps -l
 查看进程, 且显示cmd命令
 ps aux   //如果只显示自己的, 可以ps ux
 
-###kill进程
+### 查看端口占用, kill进程
 kill -9 pid
 kill pid
 
-###netstat -lnp | grep 8500
+netstat -lnp | grep 8500
 
+netstat -apn | grep 8050 | awk -F'LISTEN'  '{print $2}' | awk -F'/' '{print $1}' | xargs kill -9
+lsof -n -i :8000 | grep LISTEN | awk '{print $2}' | xargs kill -9
 
-###终端打开GBK编码的文件
+### 查看已经删除但还在引用的文件
+lsof | grep deleted
+
+### 终端打开GBK编码的文件
 head newcookiesort_20150824 | iconv -f gb18030 -t utf8
 iconv -f gbk -t utf-8
 
