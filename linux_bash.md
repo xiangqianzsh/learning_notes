@@ -88,6 +88,29 @@ scp zhangsan@172.80.70.101:/home/machine_infos.txt ./
 
 ```
 
+执行代码示例3:
+```
+# ssh内部的变量, 使用 $ 时, 需要再加入 \ 号
+
+set -x
+
+var_out="var_out_of_ssh"
+ssh admin@172.28.117.121 << END
+    var_inner="var_inner_of_ssh"
+    echo ${var_out}  # ok, 输出为 "var_out_of_ssh" ssh外的变量可以使用, 可能这些变量在进入ssh前已经被翻译好了.
+    echo ${var_inner}  # error, 输出为""(空字符), ssh内的变量无法使用, 因为$被转义了.
+    echo \${var_inner} # ok, 输出为"var_inner_of_ssh"
+
+    if [ \$? -eq 0 ]; then  # 判断执行状态的时候也仍然要加 \ 号
+        echo "execute ok"
+    else
+        echo "execute error"
+    fi
+    
+    lsof -n -i :8080 | grep LISTEN | awk '{print \$2}' # 这样的语句也是需要的
+END
+```
+
 
 ### 并行化命令  cat cmd.txt  | parallel -j 3
 注意cmd.txt里面不要带`&`号
