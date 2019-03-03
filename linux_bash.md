@@ -151,6 +151,19 @@ ulimit -m $memory_size
 find . -name "*.conf.rb" | xargs grep "SortedKeyGroup"
 find . -name "*.sh" | xargs grep 'Linux-amd64-64'
 ```
+###  linux输出文件有几列
+```shell
+cat rec.621017_feature_log_20170930 | head |  cut -f 3  | awk -F ',' '{print NF}'
+```
+### sed
+```
+把所有的python文件里的tab替换为四个空格.
+sed -i "s/\t/    /g" *.py
+sed -i "s/\t/    /g" `find . -name "*.py"`
+
+sed -i "s/\t/    /g" ImFeedBack6FeaturePlugin.h
+```
+
 ### mail发邮件
 ​```bash
 cmd='wget ftp://hostname:/home/files/data.tar.gz'
@@ -274,6 +287,36 @@ find   -name april*                     在当前目录下查找以april开始�
 http://www.cnblogs.com/wanqieddy/archive/2011/06/09/2076785.html
 
 
+### shell脚本执行, 取得当前脚本路径
+```bash
+path=$(cd `dirname $0`; pwd)
+cd $path
+```
+
+### .bashrc设置
+```
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# export SYSTEMD_PAGER=
+
+# User specific aliases and functions
+
+export PS1="[\[\e[0;36m\]\u\[\e[m\]@\[\e[0;32m\]\h \[\e[0;35m\]\w\[\e[m\]]\\$  "
+
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+
+bind '"\e[A": history-search-backward'
+bind '"\e[B": history-search-forward'
+
+```
 
 ### ssh密钥登录及远程执行命令
 参考链接

@@ -82,6 +82,24 @@ int main()
     return 0;
 }
 ```
+### 字符串转成小写
+```c++
+#include <iostream>  // std::cout, std::endl
+#include <algorithm>  // std::transform
+using namespace std;
+int main()
+{
+	std::string word = "This is A Test";
+	std::string wordLower;
+	wordLower.resize(word.size());
+	std::transform(word.begin(), word.end(), wordLower.begin(), ::tolower);
+
+    std::cout << "word: " << word << std::endl;
+	std::cout << "wordLower: " << wordLower << std::endl;
+    return 0;
+}
+```
+
 ### 解析url中的参数
 ```c++
 #include <iostream>
@@ -165,7 +183,35 @@ int main()
 }
 ```
 
+
+## 循环
+### for循环break
+```c++
+// for循环break之后, 不会自增, 因为 increment 在代码之后才执行. 使用请注意.
+// for循环的流程图见: http://www.runoob.com/cplusplus/cpp-for-loop.html
+#include <iostream>
+using namespace std;
+int main()
+{
+    int i;
+    for (i = 0; i <= 10; i++) {
+        cout << "i: " << i << endl;
+        if (i == 3)
+            break;
+    }
+    cout << "i: " << i << endl;
+    return 0;
+}
+// output
+// i: 0
+// i: 1
+// i: 2
+// i: 3
+// i: 3
+```
+
 ## time
+
 ### 计算监控的时间差
 ```c++
 #include <sys/time.h>  // timeval
@@ -239,6 +285,43 @@ int main()
 // 结果: 
 // numbers: 2.1, 3.1, 4.1, 5.1, 
 ```
+## 异常
+### c++ 中 catch(...)省略号的作用
+```c++
+try {
+	//to do
+} catch(std::exception &err){
+    std::cout<<err.what()<<std::endl;
+} catch(...) {
+//这里会拦截住所有try里没有被前面捕获的错误，但是你不知道是什么错误
+//如果有前边的catch，这个...一般不会运行到
+	std::cout<<"未知错误"<<std::endl;
+}
+```
+
+## 其它
+### typeid(*plugin.get()).name();
+### ItemFeatureVecPtr result = std::make_shared<ItemFeatureVec>();
+### const char* const 
+```
+const char* const prodDimMapping[] = {
+        "sku", "spu", "brand", "c3", "prodword", "prodwordv3",
+        "ext", "shop", "term", "gender", "adj", "price", "unknown"
+};
+```
+### 代码片断
+```cpp
+
+(MODEL_TYPE_DNN.compare(modelType) == 0) 
+struct.at("proper1")
+
+    std::sort(itemScoreListPtr->begin(), itemScoreListPtr->end(),
+    [](const ItemScore &a, const ItemScore &b) -> bool {
+        return a.score > b.score;
+    });
+```
+
+
 ## 继承
 ```c++
 #include <iostream>
@@ -314,7 +397,7 @@ https://www.cnblogs.com/sylar5/p/6644870.html
 
 ## 算法
 ### merge sorted vector
-```
+```cpp
 #include <iostream>
 #include <vector>
 #include <algorithm>
